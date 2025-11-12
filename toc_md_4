@@ -1,0 +1,159 @@
+Module 4: Pushdown Automata (PDA)** — a key topic that connects **finite automata** with **context-free grammars (CFGs)**.
+Let’s break it down clearly and simply 👇
+
+---
+
+## 🧩 **What is a Pushdown Automaton (PDA)?**
+
+A **Pushdown Automaton (PDA)** is like a **Finite Automaton (FA)** but with an extra memory structure — a **stack**.
+
+👉 This makes PDA more powerful than FA and allows it to recognize **Context-Free Languages (CFLs)**.
+
+---
+
+### **Formal Definition**
+
+A PDA is represented as a **7-tuple:**
+
+```
+M = (Q, Σ, Γ, δ, q₀, Z₀, F)
+```
+
+Where:
+
+| Symbol | Meaning                                            |
+| ------ | -------------------------------------------------- |
+| **Q**  | Set of finite states                               |
+| **Σ**  | Input alphabet                                     |
+| **Γ**  | Stack alphabet (symbols that can be pushed/popped) |
+| **δ**  | Transition function                                |
+| **q₀** | Start state                                        |
+| **Z₀** | Initial symbol on stack (bottom marker)            |
+| **F**  | Set of final states                                |
+
+---
+
+### **Language Accepted by PDA**
+
+Example from your notes:
+
+```
+L = { aⁿ bⁿ | n ≥ 0 }
+```
+
+✅ This is a **Context-Free Language** (CFL), recognized by PDA.
+
+---
+
+## 🧠 **Working of a PDA**
+
+The PDA uses three things at any time:
+
+1. **Current state**
+2. **Current input symbol**
+3. **Top of the stack**
+
+It then decides:
+
+* What new state to go to
+* Whether to **push** or **pop** symbols on the stack.
+
+---
+
+### **Transition Function**
+
+```
+δ : Q × (Σ ∪ {ε}) × Γ → P(Q × Γ*)
+```
+
+This means:
+
+* Current state ∈ Q
+* Current input symbol ∈ Σ (or ε for empty input)
+* Current stack top ∈ Γ
+* Outputs: new state and new stack content (could be multiple possibilities)
+
+---
+
+## ⚙️ **Example Transition Explanation**
+
+### Example 1:
+
+```
+δ(p, a, Z₀) = (q, aZ₀)
+```
+
+✅ Meaning:
+
+* PDA is in **state p**.
+* Input symbol **a** is being read.
+* **Z₀** is on top of the stack.
+* Then PDA goes to **state q**, and **pushes ‘a’** on top of the stack (so stack becomes `aZ₀`).
+
+✅ Visually:
+
+```
+Before: [Z₀]
+After:  [aZ₀]
+```
+
+So, it **pushes ‘a’** onto the stack.
+
+---
+
+### Example 2:
+
+```
+δ(p, a, Z₀) = (q, ε)
+```
+
+✅ Meaning:
+
+* PDA is in **state p**, reads **a**, and **Z₀** is on top of the stack.
+* It goes to **state q**, **removes Z₀** from the stack (because ε means nothing left).
+
+✅ Visually:
+
+```
+Before: [Z₀]
+After:  []
+```
+
+So, it **pops Z₀** (deletes it).
+
+---
+
+## 🧩 **Summary of Symbols**
+
+| Symbol  | Represents                                |
+| ------- | ----------------------------------------- |
+| **p**   | Present state                             |
+| **q**   | Next state                                |
+| **a**   | Input symbol being read                   |
+| **Z₀**  | Symbol at top of stack                    |
+| **aZ₀** | New stack content (a pushed on top of Z₀) |
+| **ε**   | Pop operation (remove top of stack)       |
+
+---
+
+## 🧠 **Key Idea**
+
+* **Push** operation → adds symbol to the top of stack
+* **Pop** operation → removes the top symbol
+* PDA accepts input if:
+
+  1. It reaches a **final state**, or
+  2. The **stack becomes empty**
+
+---
+
+## ✅ **Takeaway**
+
+| Concept       | Finite Automata | Pushdown Automata                      |         |          |
+| ------------- | --------------- | -------------------------------------- | ------- | -------- |
+| Memory        | No memory       | Has a stack (infinite memory in depth) |         |          |
+| Language Type | Regular         | Context-Free                           |         |          |
+| Example       | `{ aⁿbⁿ         | n≥0 }` ❌                               | `{ aⁿbⁿ | n≥0 }` ✅ |
+
+---
+
