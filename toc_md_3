@@ -678,4 +678,301 @@ A -> ε | bAcc
 
 ---
 
+Excellent — this page in your notebook covers two important topics:
+
+1️⃣ **CFG for strings where number of a’s > number of b’s**
+2️⃣ **CFG for arithmetic expressions + ambiguity explanation**
+
+Let’s decode everything clearly and simply 👇
+
+---
+
+## 🧩 **1. CFG for L = { w ∈ {a, b}* | nₐ(w) > n_b(w) }**
+
+✅ **Meaning:**
+All strings that contain **more a’s than b’s**.
+
+✅ **Examples:**
+`a`, `aab`, `aaabb`, `aabb`, etc.
+
+---
+
+### **Grammar:**
+
+```
+S → AB | BA | ABA
+A → aAb | aA | a | ε
+B → bBc | b | ε
+```
+
+➡️ In your notes, the general form written is:
+
+```
+S → AB | BA | ABA
+A → aAb | aA | a | ε
+B → bBc | aA | a | ε
+```
+
+✅ **Idea behind this grammar:**
+
+* `A` generates sequences that contain more `a`s.
+* `B` balances or mixes `b`s.
+* `S` combines them in different orders (AB, BA, ABA) to allow multiple forms where a’s outnumber b’s.
+
+✅ **Strings generated:**
+
+```
+a, aa, aab, aba, aaba, aaabb, ...
+```
+
+---
+
+## 🧠 **Derivations and Parse Trees**
+
+You’ve noted these terms:
+
+* **LMD (Leftmost Derivation)** – Always expand the **leftmost** non-terminal first.
+* **RMD (Rightmost Derivation)** – Always expand the **rightmost** non-terminal first.
+* **Parse Tree** – A tree structure showing how the start symbol derives the entire string step by step.
+
+### **Example:**
+
+```
+E → E + E | E * E | (E) | I
+I → a | b | c
+```
+
+This grammar can generate arithmetic expressions like:
+
+```
+a + b * c
+```
+
+---
+
+## ⚙️ **2. CFG for Arithmetic Expressions**
+
+✅ **Grammar:**
+
+```
+E → E + E | E - E | E / E | E * E | (E) | I
+I → a | b | c | I_a | .... | I_z
+```
+
+✅ **Example Derivation:**
+
+```
+E ⇒ E + E
+  ⇒ I + E
+  ⇒ I + E * E
+  ⇒ a + b * c
+```
+
+This grammar allows both interpretations:
+
+1. `(a + b) * c`
+2. `a + (b * c)`
+
+Thus, it’s **ambiguous** because both derivations are valid — the grammar doesn’t define operator precedence.
+
+---
+
+## 🚫 **Ambiguous Grammar**
+
+A grammar is **ambiguous** if:
+
+* There exists **more than one parse tree** or **more than one leftmost derivation** for the same string.
+
+✅ **Example of Ambiguity:**
+
+```
+E → E + E | E * E | (E) | I
+```
+
+For input `a + b * c`:
+
+* One derivation: `a + (b * c)`
+* Another: `(a + b) * c`
+
+Hence, ambiguous.
+
+---
+
+## ✅ **Unambiguous Grammar for Arithmetic Expressions**
+
+To **remove ambiguity**, we define **operator precedence**:
+
+1. `*` has higher precedence than `+`
+2. Parentheses have highest precedence
+
+✅ **Unambiguous Grammar:**
+
+```
+E → E + T | T
+T → T * F | F
+F → (E) | I
+I → a | b | c
+```
+
+✅ **Derivation Example:**
+
+```
+E ⇒ E + T
+  ⇒ T + T
+  ⇒ F + T
+  ⇒ I + T
+  ⇒ a + T
+  ⇒ a + T * F
+  ⇒ a + F * F
+  ⇒ a + b * c
+```
+
+Now the parse tree ensures correct precedence (multiplication before addition).
+
+---
+
+## 📘 **Summary Table**
+
+| Topic                          | Grammar                                   | Notes                           |
+| ------------------------------ | ----------------------------------------- | ------------------------------- |
+| nₐ > n_b                       | S → AB | BA | ABA etc.                    | Generates strings with more a’s |
+| Arithmetic Expression          | E → E + E | E * E | (E) | I               | Ambiguous                       |
+| Unambiguous Arithmetic Grammar | E → E + T | T; T → T * F | F; F → (E) | I | Defines operator precedence     |
+| Parse Tree Terms               | LMD, RMD, Ambiguity                       | Used to check grammar structure |
+
+---
+
+Perfect 👍 — this page visually explains **ambiguity in grammars** using **parse trees** and **derivations** for the expression `a + b * c`. Let’s go through it simply and clearly 👇
+
+---
+
+## 🧩 **Topic: Ambiguous Grammar Example**
+
+### **Given Grammar**
+
+```
+E → E + E | E * E | I
+I → a | b | c
+```
+
+---
+
+### **String to Derive:**
+
+```
+a + b * c
+```
+
+This grammar allows **two different parse trees** → so it’s **ambiguous**.
+
+---
+
+## 🌳 **Parse Tree 1 – Interpreting as (a + b) * c**
+
+```
+          E
+        / | \
+       E  *  E
+     / | \
+    E  +  E
+    |     |
+    a     b
+```
+
+✅ **Derivation (Leftmost):**
+
+```
+E ⇒ E * E
+  ⇒ E + E * E
+  ⇒ a + E * E
+  ⇒ a + b * E
+  ⇒ a + b * c
+```
+
+✅ **Meaning:** (a + b) * c
+
+---
+
+## 🌳 **Parse Tree 2 – Interpreting as a + (b * c)**
+
+```
+         E
+       / | \
+      E  +  E
+      |     /|\
+      I    E * E
+      |    |   |
+      a    b   c
+```
+
+✅ **Derivation (Rightmost):**
+
+```
+E ⇒ E + E
+  ⇒ I + E
+  ⇒ a + E * E
+  ⇒ a + I * E
+  ⇒ a + b * c
+```
+
+✅ **Meaning:** a + (b * c)
+
+---
+
+### 🧠 **Observation:**
+
+The **same string (`a + b * c`)** produces **two different parse trees**, hence:
+
+```
+Grammar is ambiguous.
+```
+
+---
+
+## 🧩 **How to Remove Ambiguity**
+
+Define **operator precedence**:
+
+1. Multiplication (`*`) has **higher precedence** than addition (`+`).
+2. Use separate non-terminals for each operator level.
+
+✅ **Unambiguous Grammar:**
+
+```
+E → E + T | T
+T → T * F | F
+F → (E) | I
+I → a | b | c
+```
+
+Now, the parse tree will always treat `*` before `+`, meaning only `a + (b * c)` is valid.
+
+---
+
+## 🧩 **Another Example of Ambiguous Grammar**
+
+```
+S → aSbS | bSaS | ε
+```
+
+This grammar can generate multiple parse trees for the same string — for instance:
+
+```
+aabb
+```
+
+can be derived in more than one way → ambiguous.
+
+---
+
+### **Simplified Summary**
+
+| Term                    | Meaning                                          |       |                 |
+| ----------------------- | ------------------------------------------------ | ----- | --------------- |
+| **Ambiguous Grammar**   | Grammar with >1 parse tree for same string       |       |                 |
+| **Unambiguous Grammar** | Grammar that gives exactly one unique parse tree |       |                 |
+| **Example**             | `E → E + E                                       | E * E | I` is ambiguous |
+| **Fix**                 | Use hierarchical grammar with precedence rules   |       |                 |
+
+---
 
