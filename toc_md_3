@@ -265,3 +265,417 @@ That’s the language **{ aⁿ | n ≥ 1 }**
 | ε                  | Empty string (means stop)        |
 
 ---
+
+**examples of constructing Context-Free Grammars (CFGs)** for different languages.
+Let’s go through each one simply and clearly 👇
+
+---
+
+## 🧩 **1. Language: L = { aⁿ bⁿ | n ≥ 0 }**
+
+✅ **Meaning:**
+Equal number of a’s followed by equal number of b’s.
+Examples: `ε`, `ab`, `aabb`, `aaabbb`, …
+
+✅ **Grammar:**
+
+```
+S → ε | aSb
+```
+
+👉 This means:
+
+* If n = 0 → produce ε
+* Otherwise, wrap `a` and `b` around whatever S generates (recursive pattern).
+
+✅ **Generated strings:**
+
+```
+ε, ab, aabb, aaabbb, ...
+```
+
+---
+
+## 🧩 **2. Language: L = { aⁿ bⁿ | n ≥ 1 }**
+
+
+```
+S → ab | aSb
+```
+
+
+---
+
+## 🧩 **3. Language: L = { aⁿ⁺¹ bⁿ | n ≥ 0 }**
+
+✅ **Meaning:**
+Number of a’s = one more than number of b’s.
+Examples: `a`, `aab`, `aaabb`, …
+
+✅ **Grammar:**
+
+```
+S → a | aSb
+```
+
+✅ **Logic:**
+
+* Base case: single `a` (when no b).
+* Recursive case: add one `b` and one `a` before it.
+
+✅ **Generated strings:**
+
+```
+a, aab, aaabb, aaaabbbb, ...
+```
+
+---
+
+## 🧩 **4. Language: L = { aⁿ bⁿ⁺² | n ≥ 0 }**
+
+✅ **Meaning:**
+Two more b’s than a’s.
+Examples: `bb`, `abb b`, `aabb b`, …
+
+✅ **Grammar:**
+
+```
+S → bb | aSbb
+```
+
+✅ **Logic:**
+
+* Base: 0 a’s → 2 b’s (rule `S → bb`)
+* Recursive: every `a` adds 2 `b’s`.
+
+✅ **Generated strings:**
+
+```
+bb, abb b, aabb bb, ...
+```
+
+---
+
+## 🧩 **5. Language: L = { aⁿ b²ⁿ | n ≥ 0 }**
+
+✅ **Meaning:**
+Number of b’s is **double** the number of a’s.
+Examples: `ε`, `abb`, `aabbbb`, …
+
+✅ **Grammar:**
+
+```
+S → ε | aSbb
+```
+
+✅ **Logic:**
+Each time you add one `a`, you add two `b’s` at the end.
+
+✅ **Generated strings:**
+
+```
+ε, abb, aabbbb, aaabbbbbb, ...
+```
+
+---
+
+## 🧩 **6. Palindrome Language over Σ = {a, b}**
+
+✅ **Meaning:**
+Strings that read the same backward and forward.
+Examples: `ε`, `a`, `b`, `aba`, `bab`, `abba`, `baab`, …
+
+✅ **Grammar:**
+
+```
+S → ε | a | b | aSa | bSb
+```
+
+✅ **Logic:**
+
+* Start and end can be the same letter (`aSa` or `bSb`).
+* Middle part can be empty (ε) or a single letter (`a` or `b`).
+
+✅ **Generated strings:**
+
+```
+ε, a, b, aba, bab, abba, baab, ...
+```
+
+---
+
+
+## 🧩 **7. Language of Palindromes**
+
+**L = { w | w = wʳ }**
+👉 All strings that read the same forwards and backwards.
+
+### **Grammar:**
+
+```
+S → ε | a | b | aSa | bSb
+```
+
+✅ **Meaning:**
+
+* `ε` = empty string
+* Single letter words (`a` or `b`) are palindromes.
+* `aSa` means if S is palindrome, wrapping `a` around it keeps it palindrome.
+* Similarly, `bSb` keeps symmetry.
+
+✅ **Examples Generated:**
+
+```
+ε, a, b, aa, bb, aba, bab, abba, baab, ...
+```
+
+---
+
+## 🧩 **8. Language of Non-Palindromes**
+
+**Goal:** Obtain a grammar to generate non-palindromic strings over Σ = {a, b}
+
+### **Logic:**
+
+If palindrome grammar produces symmetric strings,
+→ Non-palindromes must have **asymmetry** (different starting and ending symbols).
+
+### **Grammar:**
+
+```
+S → aA | bB
+A → abb | bba | aAb | bAa
+B → aab | baa | aBa | bBb
+```
+
+✅ **Meaning:**
+
+* Starts with `a`, ends differently (`b`) — or vice versa.
+* Recursive rules (`aAb`, `bAa`, etc.) expand asymmetrical middle parts.
+
+✅ **Examples Generated:**
+
+```
+ab, ba, aabb, abbb, baaa, ...
+```
+
+---
+
+## 🧩 **9. Language: L = { 0ᵐ 1ⁿ 2ⁿ | m, n ≥ 0 }**
+
+✅ **Meaning:**
+Any number of 0’s, followed by **equal number of 1’s and 2’s.**
+
+### **Grammar:**
+
+```
+S → ε | 0S | A
+A → ε | 1A2
+```
+
+✅ **Explanation:**
+
+* `S` can produce any number of 0’s before going to `A`.
+* `A` ensures equal 1’s and 2’s by pairing them symmetrically.
+
+✅ **Examples Generated:**
+
+```
+ε, 0, 00, 012, 00112, 000111222, ...
+```
+
+---
+
+## 🧩 **10. Language: L = { w | nₐ(w) = n_b(w) }**
+
+✅ **Meaning:**
+Number of a’s and b’s are equal in the string.
+Example: `ab`, `aabb`, `baba`, etc.
+
+### **Grammar:**
+
+```
+S → ε | aSb | bSa | SS
+```
+
+✅ **Explanation:**
+
+* `aSb` adds one `a` and one `b`.
+* `bSa` also adds balanced pair in reverse order.
+* `SS` allows concatenation of smaller balanced strings.
+
+✅ **Examples Generated:**
+
+```
+ε, ab, ba, aabb, abab, bbaa, ...
+```
+
+---
+
+### 📘 **Summary Table**
+
+| #  | Language       | Grammar                     | Example Strings |
+| -- | -------------- | --------------------------- | --------------- |
+| 7  | Palindrome     | S → ε | a | b | aSa | bSb   | aba, abba       |
+| 8  | Non-palindrome | S → aA | bB; A → abb | ...  | ab, ba, aabb    |
+| 9  | 0ᵐ1ⁿ2ⁿ         | S → ε | 0S | A; A → ε | 1A2 | 012, 001122     |
+| 10 | nₐ = n_b       | S → ε | aSb | bSa | SS      | ab, ba, abab    |
+
+---
+
+Perfect 👍 — this page from your notes contains **multiple CFG examples**, each testing your understanding of how grammars generate specific languages.
+Here’s a clear, easy explanation for each section 👇
+
+---
+
+## 🧩 **1. What is the language generated by the grammar**
+
+### **Given:**
+
+```
+S → 0A | ε  
+A → 1B  
+B → 0A
+```
+
+✅ Let’s trace it:
+
+```
+S ⇒ 0A ⇒ 01B ⇒ 010A ⇒ 0101B ⇒ ...
+```
+
+So it generates strings that **start with 0** and **alternate between 0 and 1**.
+
+✅ **Language:**
+
+```
+L = { w : w ∈ (01)ⁿ, n ≥ 0 }
+```
+
+✅ **Examples:**
+
+```
+ε, 01, 0101, 010101, ...
+```
+
+---
+
+## 🧩 **2. Balanced Parentheses Grammar**
+
+### **Goal:** Generate balanced brackets `{}`, `[]`, `()`
+
+### **Grammar:**
+
+```
+S → ε | (S) | [S] | {S} | SS
+```
+
+✅ **Meaning:**
+
+* `ε` → empty string (balanced by default)
+* `(S)`, `[S]`, `{S}` → add one pair around an existing balanced structure
+* `SS` → concatenate two balanced strings
+
+✅ **Examples:**
+
+```
+(), {}, [], ()[], {[()]}, ...
+```
+
+---
+
+## 🧩 **3. Grammar for L = { 0ⁱ1ʲ | i ≥ j ≥ 0 }**
+
+### **Grammar:**
+
+```
+S → AB  
+A → ε | 0A  
+B → 1 | 1B
+```
+
+✅ **Explanation:**
+
+* A generates 0’s freely.
+* B generates one or more 1’s.
+* Ensures i ≥ j (more or equal 0’s than 1’s).
+
+✅ **Examples:**
+
+```
+ε, 01, 001, 0001, 00011, ...
+```
+
+---
+
+## 🧩 **4. Grammar for Integers (Positive or Negative)**
+
+### **Goal:** Represent integers like `+123`, `-45`, `789`, etc.
+
+### **Grammar:**
+
+```
+I → S N | N  
+S → + | -  
+N → D | D N  
+D → 0 | 1 | 2 | ... | 9
+```
+
+✅ **Explanation:**
+
+* `S` = optional sign
+* `N` = one or more digits
+* `D` = single digit (0–9)
+
+✅ **Examples:**
+
+```
+9, 56, +12, -43, ...
+```
+
+---
+
+## 🧩 **5. Grammar for L = { aⁿ bᵐ cᵏ | n + 2m = k , n >= 0 , m >= 0}**
+
+This one’s a bit advanced — the condition means:
+
+> Number of c’s = number of a’s + twice the number of b’s.
+
+✅ **Grammar:**
+
+```
+S → aScc | bSccc | ε
+
+or 
+
+S -> aSc | A
+A -> ε | bAcc
+```
+
+✅ **Explanation:**
+
+* Each `a` adds **2 c’s**
+* Each `b` adds **3 c’s**
+* `ε` = base case (balanced condition)
+
+✅ **Examples:**
+
+```
+ε, acc, bccc, aabcccccc, abcccccc, ...
+```
+
+---
+
+## 🧩 **Summary Table**
+
+| # | Grammar Concept      | Grammar Rules         | Example Strings     |
+| - | -------------------- | --------------------- | ------------------- |
+| 1 | Alternating 0s & 1s  | S→0A|ε; A→1B; B→0A    | ε, 01, 0101         |
+| 2 | Balanced Parentheses | S→ε|(S)|[S]|{S}|SS    | (), [], {}, {[()]}  |
+| 3 | 0ⁱ1ʲ (i ≥ j ≥ 0)     | S→AB; A→ε|0A; B→1|1B  | 01, 001, 00011      |
+| 4 | Integer Numbers      | I→SN|N; S→+|−; N→D|DN | 7, +9, -23          |
+| 5 | aⁿbᵐcᵏ (n+2m=k)      | S→aScc|bSccc|ε        | acc, bccc, abcccccc |
+
+---
+
+
