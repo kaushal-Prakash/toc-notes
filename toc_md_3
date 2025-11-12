@@ -133,7 +133,6 @@ q₂ → ε   (because q₂ is final)
 To convert a **Finite Automaton (FA)** into a **Grammar (G)**, we follow these steps:
 
 ---
-
 ### **Step 1:**
 
 If there is a transition in the automaton like
