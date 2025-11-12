@@ -1,0 +1,267 @@
+
+
+## 🧩 **Context-Free Grammar (CFG)**
+
+A **grammar (G)** is written as:
+
+> **G = (V, T, P, S)**
+
+Where:
+
+* **V** → Set of variables (also called *non-terminals*)
+
+  * e.g., `S`, `A`, `B`, etc.
+* **T** → Set of terminals (actual symbols or alphabets)
+
+  * e.g., `a`, `b`, `c`
+* **P** → Set of production rules
+
+  * Rules tell how to replace non-terminals with other symbols.
+  * Example: `S → aAb`
+* **S** → Start symbol
+
+  * The rule where the grammar starts.
+
+👉 So, CFG means each rule (production) has **one variable on the left-hand side**:
+**A → α**, where α is a combination of terminals and/or variables.
+
+---
+
+## 🧱 **Example of a CFG**
+
+```
+S → aAb
+A → aAb | b
+```
+
+This means:
+
+* Start from S.
+* You can replace S by `aAb`.
+* Then replace A by either `aAb` (to grow) or `b` (to stop).
+
+The strings it generates are:
+`aabb`, `aaabbb`, `aaaabbbb`, etc.
+→ That’s the language **{ aⁿbⁿ | n ≥ 1 }**
+
+---
+
+## 🧠 **Chomsky Hierarchy**
+
+This classifies all grammars into **four types** (from most general to most specific):
+
+| Type       | Name                                     | Rules Format   | Machine Equivalent       | Example Rule    | Notes                                       |
+| ---------- | ---------------------------------------- | -------------- | ------------------------ | --------------- | ------------------------------------------- |
+| **Type 0** | Unrestricted / Phrase-structured Grammar | No restriction | Turing Machine           | α → β           | Most powerful grammar                       |
+| **Type 1** | Context-sensitive Grammar                |                | Linear Bounded Automaton | αAβ → αγβ       | Output cannot be shorter than input         |
+| **Type 2** | Context-free Grammar                     |                | Pushdown Automaton       | A → α           | Used in programming languages               |
+| **Type 3** | Regular Grammar                          |                | Finite Automaton         | A → aB or A → a | Simplest form (used in regular expressions) |
+
+💡 Think of it like this:
+
+```
+Regular Grammar ⊂ Context-Free Grammar ⊂ Context-Sensitive Grammar ⊂ Unrestricted Grammar
+```
+
+---
+
+## ⚙️ **Grammar from Finite Automata (FA)**
+
+You can **convert an automaton into a grammar**.
+
+Let:
+
+```
+M = (Q, Σ, δ, q0, F)
+```
+
+Where:
+
+* **Q** → set of states = {q₀, q₁, q₂, ...}
+* **Σ** → input symbols (alphabet) = {a₁, a₂, ...}
+* **q₀** → start state
+* **F** → set of final states
+* **δ** → transition function
+
+We can make a grammar:
+
+> **G = (V, T, P, S)**
+
+Where:
+
+* **V = Q** (each state becomes a variable)
+* **T = Σ** (terminals = input symbols)
+* **S = q₀** (start variable = start state)
+* **P** = set of productions (derived from transitions)
+
+### Example
+
+If automaton has:
+
+```
+q₀ --a--> q₁
+q₁ --b--> q₂
+q₂ is a final state
+```
+
+Then grammar rules are:
+
+```
+q₀ → a q₁
+q₁ → b q₂
+q₂ → ε   (because q₂ is final)
+```
+
+---
+
+## 📄 **Summary**
+
+| Concept           | Meaning                                      |
+| ----------------- | -------------------------------------------- |
+| CFG               | Grammar with one non-terminal on LHS         |
+| Components of CFG | (V, T, P, S)                                 |
+| Chomsky Hierarchy | Classification of grammar types              |
+| Regular Grammar   | Simplest, recognized by Finite Automaton     |
+| CFG               | Recognized by Pushdown Automaton             |
+| Conversion        | Finite Automaton → Grammar using transitions |
+
+---
+
+
+## 🧭 **Conversion of FA to Grammar**
+
+To convert a **Finite Automaton (FA)** into a **Grammar (G)**, we follow these steps:
+
+---
+
+### **Step 1:**
+
+If there is a transition in the automaton like
+
+> δ(qᵢ, a) = qⱼ
+
+Then we write a production rule:
+
+> qᵢ → a qⱼ
+
+✅ This means:
+From state `qᵢ`, on reading symbol `a`, we move to state `qⱼ`.
+
+---
+
+### **Step 2:**
+
+If `qⱼ` is a **final state**, then we add another rule:
+
+> qⱼ → ε
+
+✅ This means:
+Once we reach a final state, we can **stop** (produce an empty string).
+
+---
+
+### Example:
+
+**Question:**
+
+> Obtain a grammar to generate strings consisting of any number of ‘a’s.
+
+---
+
+### **Step 1: Draw the automaton**
+
+```
+       a
+   +------+
+   ↓      |
+→ (A) ----+
+   ↑ final state
+```
+
+* Start state = `A`
+* Final state = `A`
+* Input = `a`
+* Transition = On `a`, stay in the same state (`A → aA`)
+
+---
+
+### **Step 2: Write Grammar Rules**
+
+From the transition:
+
+```
+A → aA
+```
+
+Since `A` is also a **final state**, we add:
+
+```
+A → ε
+```
+
+---
+
+### ✅ **Final Grammar:**
+
+```
+G = (V, T, P, S)
+```
+
+Where:
+
+* **V** = { A }
+* **T** = { a }
+* **P** = { A → aA | ε }
+* **S** = A
+
+---
+
+### **This Grammar Generates:**
+
+```
+ε, a, aa, aaa, aaaa, ...
+```
+
+👉 Meaning: any number of ‘a’s (including zero).
+That’s the **language { aⁿ | n ≥ 0 }**
+
+---
+
+### **Another Example in Your Notes**
+
+There’s also an example with **two states** — `S` and `A`:
+
+* From `S`, on `a`, go to `A`
+* From `A`, on `a`, stay in `A` (loop)
+* `A` is a final state
+
+So transitions are:
+
+```
+δ(S, a) = A
+δ(A, a) = A
+```
+
+Hence, grammar rules:
+
+```
+S → aA
+A → aA | ε
+```
+
+✅ This generates strings: `a`, `aa`, `aaa`, ...
+That’s the language **{ aⁿ | n ≥ 1 }**
+
+---
+
+### 🔹 Summary
+
+| Concept            | Meaning                          |
+| ------------------ | -------------------------------- |
+| δ(qᵢ, a) = qⱼ      | Transition in FA                 |
+| qᵢ → a qⱼ          | Grammar rule for that transition |
+| qⱼ final state     | Add rule `qⱼ → ε`                |
+| S (start variable) | Same as start state of FA        |
+| ε                  | Empty string (means stop)        |
+
+---
