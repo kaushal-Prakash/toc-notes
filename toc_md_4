@@ -621,3 +621,420 @@ So if stack = `aZ₀`
 * IDs help describe every **step** PDA takes while reading a string.
 
 ---
+Perfect 👍
+This page combines **two different PDAs** — one for a *new language* and another for explaining **Instantaneous Description (ID)**.
+Let’s go through each part in **simple and clear words** 👇
+
+---
+
+## 🧠 **1️⃣ PDA for the Language**
+
+### ( L = { a^n b^n ;|; n \ge 1 } )
+
+That means:
+
+* Equal number of `a`’s and `b`’s
+* All `a`’s come first, then all `b`’s
+  ✅ Examples: `ab`, `aabb`, `aaabbb`
+
+---
+
+### **Input and Stack Alphabets**
+
+* Input symbols: **Σ = {a, b}**
+* Stack symbols: **Γ = {a, b, Z₀}**
+
+  * `Z₀` → Initial symbol in stack (bottom marker)
+
+---
+
+### **Language Pattern**
+
+String **starts with a**
+String **ends with b**
+
+🧩 Example shown in notes:
+
+```
+aabb
+aaabbb
+```
+
+---
+
+### **Transitions Explained**
+
+| Transition               | Meaning                                                           |
+| ------------------------ | ----------------------------------------------------------------- |
+| δ(q₀, a, Z₀) = (q₀, aZ₀) | If reading `a` and stack top is `Z₀`, push `a`                    |
+| δ(q₀, a, a) = (q₀, aa)   | If reading another `a`, push one more `a` on top                  |
+| δ(q₀, b, a) = (q₁, ε)    | On seeing first `b`, pop one `a` (switch to popping mode, q₁)     |
+| δ(q₁, b, a) = (q₁, ε)    | For each `b`, pop a matching `a`                                  |
+| δ(q₁, ε, Z₀) = (q₂, Z₀)  | When input is finished and only Z₀ remains, accept by final state |
+
+---
+
+### **📘 Step-by-Step Example**
+
+Let’s take **aabb**:
+
+1️⃣ Start:
+`q₀` — Read `a`, push onto stack → Stack: `aZ₀`
+`q₀` — Read next `a`, push again → Stack: `aaZ₀`
+
+2️⃣ Then comes `b`:
+`q₀ → q₁` (switch to popping mode)
+Pop one `a` for each `b`
+
+After second `b`, stack becomes only `Z₀`.
+
+3️⃣ No input left → move to `q₂` → ✅ **Accepted**
+
+---
+
+### **Visual Diagram Summary**
+
+```
+(q₀) --a, Z₀/aZ₀--> (q₀)
+(q₀) --a, a/aa--> (q₀)
+(q₀) --b, a/ε--> (q₁)
+(q₁) --b, a/ε--> (q₁)
+(q₁) --ε, Z₀/Z₀--> (q₂)
+```
+
+---
+
+## 🧩 **2️⃣ ID – Instantaneous Description**
+
+### **Definition**
+
+If
+( M = (Q, Σ, Γ, δ, q₀, Z₀, F) )
+is a PDA, then an **Instantaneous Description (ID)** is represented as:
+
+```
+(q, w, α)
+```
+
+Where:
+
+* **q** → current state
+* **w** → input string still to be read
+* **α** → current contents of the stack
+
+---
+
+### **Explanation in Simple Words**
+
+It shows **the current situation** of the PDA:
+
+* What **state** it is in
+* What **input remains** to be processed
+* What’s currently **inside the stack**
+
+---
+
+### **Example**
+
+Suppose PDA is in:
+
+```
+(q₀, abb, aZ₀)
+```
+
+That means:
+
+* PDA is in state **q₀**
+* Input **abb** is yet to be read
+* Stack has **a** on top and **Z₀** at the bottom
+
+---
+
+### **Stack Rule Note in Your Page**
+
+> “The leftmost symbol in α is the top of the stack, and the rightmost symbol is the bottom.”
+
+So if stack = `aZ₀`
+→ `a` is **top**,
+→ `Z₀` is **bottom**.
+
+---
+
+✅ **In short:**
+
+* PDA reads input left to right.
+* Stack top is leftmost in α.
+* IDs help describe every **step** PDA takes while reading a string.
+
+---
+Excellent 👍
+This page explains **how PDA configurations (Instantaneous Descriptions)** work and shows an **example step-by-step simulation** of a valid string (`aaabbb`) for the language **L = { aⁿbⁿ | n ≥ 1 }**.
+Let’s go through it in **very simple and clear words** 👇
+
+---
+
+## 🧠 1️⃣ **Understanding PDA Configuration**
+
+The **current configuration** of a PDA is written as:
+
+```
+(q, aw, Zα)
+```
+
+Where:
+
+* **q** → current state
+* **aw** → remaining input string to be processed
+* **Zα** → current stack contents (Z = top of the stack)
+
+📘 Example:
+`(q0, aabb, Z0)` means:
+
+* PDA is in state `q0`
+* Input string left to read = `aabb`
+* Stack currently has `Z0` (initial symbol) at the bottom
+
+---
+
+## ⚙️ 2️⃣ **Transition Rule**
+
+If there is a transition
+
+```
+δ(q, a, Z) = (p, β)
+```
+
+then the PDA moves from:
+
+```
+(q, aω, Zα)
+```
+
+to
+
+```
+(p, ω, βα)
+```
+
+✅ Meaning:
+
+* PDA reads `a` from input (so it is removed from the input part)
+* Replaces the top stack symbol `Z` with `β`
+* Goes to new state `p`
+
+---
+
+### **Notation Used**
+
+The movement between configurations is shown as:
+
+```
+⊢
+```
+
+which means **“yields in one move.”**
+
+If there are **zero or more moves**, it is written as:
+
+```
+⊢*
+```
+
+---
+
+## 🧩 3️⃣ **Example: Valid String – `aaabbb`**
+
+Language: L = { aⁿbⁿ | n ≥ 1 }
+
+---
+
+### **Initial Configuration**
+
+```
+(q0, aaabbb, Z0)
+⊢ (q0, aabbb, aZ0)
+```
+
+→ PDA reads the first `a` and pushes `a` onto the stack.
+
+---
+
+### **Next Moves**
+
+| Step         | Action               | Configuration    |
+| ------------ | -------------------- | ---------------- |
+| δ(q0, a, Z0) | Push a               | (q0, aabbb, aZ0) |
+| δ(q0, a, a)  | Push a               | (q0, abbb, aaZ0) |
+| δ(q0, a, a)  | Push a               | (q0, bbb, aaaZ0) |
+| δ(q0, b, a)  | Pop a (switch to q1) | (q1, bb, aaZ0)   |
+| δ(q1, b, a)  | Pop a                | (q1, b, aZ0)     |
+| δ(q1, b, a)  | Pop a                | (q1, ε, Z0)      |
+| δ(q1, ε, Z0) | Accept               | (q2, ε, Z0)      |
+
+✅ **Final Configuration:**
+
+```
+(q2, ε, Z0)
+```
+
+No input left + in final state → **String Accepted!**
+
+---
+
+## 💡 4️⃣ **Meaning in Words**
+
+1️⃣ PDA starts in state `q0` with empty stack (just Z0).
+2️⃣ It reads `a`s and pushes each onto the stack.
+3️⃣ When it starts reading `b`s, it switches to popping mode (state `q1`).
+4️⃣ For each `b`, one `a` is popped.
+5️⃣ If stack returns to Z0 and no input remains, PDA accepts the string.
+
+---
+
+## ✅ **Summary**
+
+| Symbol                | Meaning                  |
+| --------------------- | ------------------------ |
+| `⊢`                   | One move (derives)       |
+| `⊢*`                  | Zero or more moves       |
+| `(q, aw, Zα)`         | PDA configuration        |
+| `δ(q, a, Z) = (p, β)` | Transition rule          |
+| Final configuration   | `(qf, ε, Z0)` → Accepted |
+
+---
+Perfect 👍
+This page continues your **PDA working example** for the language:
+
+> **L = { w c wʳ | w ∈ (a + b)* }**
+
+and shows the **Instantaneous Description (ID) sequence** for the string **bababc babab**, i.e.,
+`w = babab`, `c` is the middle symbol, and `wʳ = babab`.
+
+Let’s explain everything in very **simple and clear words 👇**
+
+---
+
+## 🧠 1️⃣ Language Recap
+
+**L = { w c wʳ | w ∈ (a + b)* }**
+
+This means:
+
+* String is split into three parts:
+  **w**, **c**, **reverse of w**
+* Example valid strings:
+
+  * `aca`
+  * `abbc bba`
+  * `babc bab`
+  * `babab c babab`
+
+So your example `babab c babab` ✅ **belongs to this language.**
+
+---
+
+## ⚙️ 2️⃣ PDA Concept Recap
+
+### PDA works in 3 phases:
+
+1️⃣ **State q₀ (push mode)**
+Push all letters of `w` (before `c`) into stack.
+
+2️⃣ **On reading ‘c’**
+Switch to state **q₁** (pop mode).
+
+3️⃣ **State q₁ (pop mode)**
+For every symbol after `c`, PDA pops and matches it with the stack top.
+
+If all symbols are matched and only Z₀ remains → **accepted**.
+
+---
+
+## 🧩 3️⃣ PDA Example Execution
+
+### Input string:
+
+```
+babab c babab
+```
+
+### Initial configuration:
+
+```
+(q₀, bababc babab, Z₀)
+```
+
+---
+
+### Step-by-step ID sequence:
+
+| Step | Action             | Configuration          |
+| ---- | ------------------ | ---------------------- |
+| 1    | Read `b`, push `b` | (q₀, ababc babab, bZ₀) |
+| 2    | Read `a`, push `a` | (q₀, babc babab, abZ₀) |
+| 3    | Read `b`, push `b` | (q₀, abc babab, babZ₀) |
+| 4    | Read `a`, push `a` | (q₀, bc babab, ababZ₀) |
+| 5    | Read `b`, push `b` | (q₀, c babab, bababZ₀) |
+
+At this point, the **first half (w)** is done, and **stack = w**.
+
+---
+
+### Now reading middle `c`:
+
+```
+(q₀, c babab, bababZ₀)
+⊢ (q₁, babab, bababZ₀)
+```
+
+→ PDA moves to **q₁** (pop mode). Stack unchanged.
+
+---
+
+### Matching phase (after c):
+
+| Step | Input | Stack top | Action |
+| ---- | ----- | --------- | ------ |
+| 1    | `b`   | `b`       | pop    |
+| 2    | `a`   | `a`       | pop    |
+| 3    | `b`   | `b`       | pop    |
+| 4    | `a`   | `a`       | pop    |
+| 5    | `b`   | `b`       | pop    |
+
+After popping all → stack = `Z₀`.
+
+---
+
+### Final configuration:
+
+```
+(q₁, ε, Z₀)
+⊢ (q₂, ε, Z₀)
+```
+
+✅ **String accepted by final state (or empty stack).**
+
+---
+
+## 💡 4️⃣ Summary of What Happens
+
+1️⃣ PDA starts in `q₀`, pushes every symbol of `w` into stack.
+2️⃣ When it reads `c`, it switches to `q₁`.
+3️⃣ Then for each symbol after `c`, it pops and matches the stack top.
+4️⃣ When both input and stack are empty (except Z₀), PDA accepts.
+
+---
+
+### ✅ Final Note
+
+Your notebook’s right page is showing these **transitions and IDs** exactly:
+
+* `(q₀, bababc babab, Z₀)`
+* `(q₀, ababc babab, bZ₀)`
+* `(q₀, babc babab, abZ₀)`
+* `(q₀, c babab, bababZ₀)`
+* `(q₁, babab, bababZ₀)`
+* `(q₁, ababab, ababZ₀)`
+* … until → `(q₂, ε, Z₀)` ✅ Accepted.
+
+---
